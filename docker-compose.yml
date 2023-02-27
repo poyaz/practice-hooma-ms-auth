@@ -1,4 +1,4 @@
-version: "2.3"
+version: "3.3"
 services:
   auth:
     build:
@@ -16,7 +16,6 @@ services:
 
 networks:
   main:
-    name: main
     driver: bridge
     ipam:
       driver: default
@@ -25,7 +24,6 @@ networks:
           gateway: 10.111.0.1
 
   db:
-    name: db
     driver: bridge
     ipam:
       driver: default

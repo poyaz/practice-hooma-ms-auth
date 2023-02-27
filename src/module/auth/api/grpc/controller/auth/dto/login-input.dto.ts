@@ -1,6 +1,6 @@
 import {instanceToPlain} from 'class-transformer';
 import {IsDefined, IsString, Matches, MaxLength, MinLength} from 'class-validator';
-import {AuthModel} from '@src-core/model/auth.model';
+import {AuthModel} from '../../../../../core/model/auth.model';
 
 export class LoginInputDto {
   @IsString()
@@ -16,7 +16,7 @@ export class LoginInputDto {
   @IsDefined()
   password: string;
 
-  static toObject(dto: LoginInputDto): AuthModel {
+  static toModel(dto: LoginInputDto): AuthModel {
     const data = AuthModel.getDefaultModel();
     data.username = dto.username;
     data.password = dto.password;
