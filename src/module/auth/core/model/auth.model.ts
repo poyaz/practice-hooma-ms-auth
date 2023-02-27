@@ -2,11 +2,16 @@ import {BaseModel, ModelRequireProp} from '@src-utility/model/baseModel';
 import {defaultModelFactory} from '@src-utility/model/defaultModelFactory';
 import {DefaultPropertiesSymbol, IsDefaultSymbol} from '@src-utility/model/symbol';
 
+export enum AuthRoleEnum {
+  ADMIN = 'admin',
+  USER = 'user',
+}
+
 export class AuthModel extends BaseModel<AuthModel> {
   id: string;
   username: string;
   password: string;
-  role: string;
+  role: AuthRoleEnum;
   createAt: Date;
 
   constructor(props: ModelRequireProp<AuthModel>) {
@@ -20,7 +25,7 @@ export class AuthModel extends BaseModel<AuthModel> {
       id: 'default-id',
       username: 'default-username',
       password: 'default-password',
-      role: 'default-role',
+      role: AuthRoleEnum.USER,
       createAt: new Date(),
       [IsDefaultSymbol]: true,
       [DefaultPropertiesSymbol]: ['id', 'username', 'password', 'role', 'createAt'],

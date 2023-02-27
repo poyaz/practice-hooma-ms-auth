@@ -1,3 +1,4 @@
 export enum ExceptionEnum {
   AUTHENTICATE_ERROR = 'AUTHENTICATE_ERROR',
+  NOT_FOUND_ERROR = 'NOT_FOUND_ERROR',
 }
