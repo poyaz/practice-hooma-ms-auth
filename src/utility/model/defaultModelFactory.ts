@@ -43,7 +43,6 @@ export function defaultModelFactory<T extends BaseModel<T>>(data: T): DefaultMod
         return Reflect.get(obj, prop, receiver);
       },
       set(obj, prop, value) {
-        console.log('sssss', prop, prefixPath);
         const keyRegex = typeof value === 'object' && !(value instanceof Date)
           ? new RegExp(`^${prefixPath.replace('.', '\\.')}${prop.toString()}\\..+`)
           : new RegExp(`^${prefixPath.replace('.', '\\.')}${prop.toString()}$`);
