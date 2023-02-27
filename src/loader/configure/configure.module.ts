@@ -4,6 +4,7 @@ import {resolve} from 'path';
 import {envValidate} from './validate/env.validation';
 import serverConfig from './config/server.config';
 import jwtConfig from './config/jwt.config';
+import postgresConfig from '@src-loader/configure/config/postgres.config';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import jwtConfig from './config/jwt.config';
       load: [
         serverConfig,
         jwtConfig,
+        postgresConfig,
       ],
     }),
   ],
