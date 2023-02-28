@@ -13,17 +13,62 @@ import {DateTimeInterface} from './core/interface/date-time.interface';
 import {AuthService} from './core/service/auth.service';
 import {GenericRepositoryInterface} from './core/interface/generic-repository.interface';
 import {AuthModel} from './core/model/auth.model';
-import {JwtService} from '@nestjs/jwt';
+import {JwtModule, JwtService} from '@nestjs/jwt';
 import {AuthServiceInterface} from './core/interface/auth-service.interface';
+import {JwtConfigInterface} from '@src-loader/configure/interface/jwt-config.interface';
+import {Algorithm} from 'jsonwebtoken';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AuthEntity]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const jwtConfig = configService.get<JwtConfigInterface>('jwt');
+        let algorithm: Algorithm;
+        switch (jwtConfig.algorithm) {
+          case 'RS256':
+            algorithm = 'RS256';
+            break;
+        }
+
+        return {
+          publicKey: jwtConfig.publicKey,
+          privateKey: jwtConfig.privateKey,
+          signOptions: {
+            algorithm,
+            expiresIn: jwtConfig.expiresTime,
+          },
+        };
+      },
+    }),
   ],
   controllers: [AuthController],
   providers: [
     ConfigService,
-    JwtService,
+    {
+      provide: JwtService,
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const jwtConfig = configService.get<JwtConfigInterface>('jwt');
+        let algorithm: Algorithm;
+        switch (jwtConfig.algorithm) {
+          case 'RS256':
+            algorithm = 'RS256';
+            break;
+        }
+
+        return new JwtService({
+          publicKey: jwtConfig.publicKey,
+          privateKey: jwtConfig.privateKey,
+          signOptions: {
+            algorithm,
+            expiresIn: jwtConfig.expiresTime,
+          },
+        });
+      },
+    },
     {
       provide: ProviderEnum.AUTH_SERVICE,
       inject: [AuthService],

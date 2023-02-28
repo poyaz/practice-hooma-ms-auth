@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import {Observable, throwError} from 'rxjs';
 import {status, Metadata} from '@grpc/grpc-js';
+import {NotFoundException} from '../../../module/auth/core/exception/not-found.exception';
+import {AuthenticateException} from '../../../module/auth/core/exception/authenticate.exception';
 
 export enum ExceptionEnum {
   UNPROCESSABLE_ENTITY_ERROR = 'UNPROCESSABLE_ENTITY_ERROR',
@@ -32,10 +34,22 @@ export class GrpcExceptionFilter<T> implements RpcExceptionFilter {
     serverMetadata.add('action', exception['action'] || ExceptionEnum.UNKNOWN_ERROR);
     serverMetadata.add('isOperation', 'isOperation' in <Error><unknown>exception ? exception['isOperation'] ? '1' : '0' : '0');
 
+    let code;
+    switch (true) {
+      case exception instanceof AuthenticateException:
+        code = status.UNAUTHENTICATED;
+        break;
+      case exception instanceof NotFoundException:
+        code = status.NOT_FOUND;
+        break;
+      default:
+        code = status.UNKNOWN;
+    }
+
     return throwError(() => ({
-      code: status.UNKNOWN,
+      code: code,
       message: exception.message,
-      details: '123',
+      details: exception.message,
       metadata: serverMetadata,
     }));
   }

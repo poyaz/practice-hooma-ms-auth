@@ -15,7 +15,7 @@ import {CommandModule} from './api/command/command.module';
     ConfigureModule,
     LoggerModule.forRoot({
       pinoHttp: {
-        autoLogging: false,
+        autoLogging: true,
         genReqId: () => null,
         quietReqLogger: false,
         transport: {target: 'pino-pretty'},

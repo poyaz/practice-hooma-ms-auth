@@ -11,7 +11,7 @@ export class LoginInputDto {
   username: string;
 
   @IsString()
-  @MinLength(6)
+  @MinLength(5)
   @MaxLength(50)
   @IsDefined()
   password: string;
