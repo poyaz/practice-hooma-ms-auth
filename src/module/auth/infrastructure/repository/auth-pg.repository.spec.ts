@@ -82,6 +82,7 @@ describe('AuthPgRepository', () => {
       outputAuthEntity.id = identifier.generateId();
       outputAuthEntity.username = 'username';
       outputAuthEntity.password = 'password';
+      outputAuthEntity.salt = 'salt';
       outputAuthEntity.role = AuthRoleEnum.USER;
       outputAuthEntity.createAt = defaultDate;
       outputAuthEntity.updateAt = null;
@@ -147,6 +148,7 @@ describe('AuthPgRepository', () => {
         id: identifier.generateId(),
         username: outputAuthEntity.username,
         password: outputAuthEntity.password,
+        salt: outputAuthEntity.salt,
         role: AuthRoleEnum.USER,
         createAt: defaultDate,
       });

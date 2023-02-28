@@ -7,6 +7,7 @@ import {JwtService} from '@nestjs/jwt';
 import {FilterModel} from '@src-utility/model/filter.model';
 import {NotFoundException} from '../exception/not-found.exception';
 import {AuthenticateException} from '../exception/authenticate.exception';
+import * as bcrypt from 'bcrypt';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -56,11 +57,12 @@ describe('AuthService', () => {
   describe(`generateToken`, () => {
     let inputModel: AuthModel;
     let filterMatch: FilterModel<AuthModel>;
+    let passwordSalt: string;
     let outputUserAndPassInvalid: AuthModel;
     let outputUserAndPassValid: AuthModel;
     let outputToken: string;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       inputModel = AuthModel.getDefaultModel();
       inputModel.username = 'username';
       inputModel.password = 'password';
@@ -68,14 +70,18 @@ describe('AuthService', () => {
       filterMatch = new FilterModel<AuthModel>();
       filterMatch.addCondition({opr: 'eq', path: 'username', data: inputModel.username});
 
+      passwordSalt = await bcrypt.genSalt(10);
+
       outputUserAndPassInvalid = AuthModel.getDefaultModel();
       outputUserAndPassInvalid.username = inputModel.username;
       outputUserAndPassInvalid.password = 'invalid-password';
+      outputUserAndPassInvalid.salt = passwordSalt;
 
       outputUserAndPassValid = AuthModel.getDefaultModel();
       outputUserAndPassValid.id = 'id';
       outputUserAndPassValid.username = inputModel.username;
-      outputUserAndPassValid.password = inputModel.password;
+      outputUserAndPassValid.password = await bcrypt.hash(inputModel.password, passwordSalt);
+      outputUserAndPassValid.salt = passwordSalt;
       outputUserAndPassValid.role = AuthRoleEnum.ADMIN;
 
       outputToken = 'signed-token';

@@ -36,6 +36,9 @@ export class AuthEntity extends BaseEntity {
   @Column({type: 'varchar', length: 225})
   password: string;
 
+  @Column({type: 'varchar', length: 100})
+  salt: string;
+
   @Column({
     type: 'enum',
     enum: AuthRoleEnum,
