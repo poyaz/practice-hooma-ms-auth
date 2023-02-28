@@ -1,11 +1,12 @@
 import {GenericRepositoryInterface} from '../../core/interface/generic-repository.interface';
-import {AuthModel} from '../../core/model/auth.model';
+import {AuthModel, AuthRoleEnum} from '../../core/model/auth.model';
 import {AsyncReturn} from '@src-utility/utility';
 import {IdentifierInterface} from '../../core/interface/identifier.interface';
 import {DateTimeInterface} from '../../core/interface/date-time.interface';
 import {AuthEntity} from '../entity/auth.entity';
-import {FindManyOptions, Repository} from 'typeorm';
-import {SortEnum} from '@src-utility/model/filter.model';
+import {Equal, FindManyOptions, Repository} from 'typeorm';
+import {FilterModel, SortEnum} from '@src-utility/model/filter.model';
+import {RepositoryException} from '../../core/exception/repository.exception';
 
 export class AuthPgRepository implements GenericRepositoryInterface<AuthModel> {
   constructor(
@@ -16,8 +17,38 @@ export class AuthPgRepository implements GenericRepositoryInterface<AuthModel> {
   }
 
   async getAll<F>(filter?: F): AsyncReturn<Error, Array<AuthModel>> {
-    const findOptions: FindManyOptions<AuthModel> = {order: {createAt: SortEnum.DESC}};
+    const findOptions: FindManyOptions<AuthEntity> = {order: {createAt: SortEnum.DESC}};
 
-    return Promise.resolve(undefined);
+    if (filter) {
+      const filterModel = <FilterModel<AuthModel>><any>filter;
+
+      if (filterModel.getLengthOfCondition() > 0) {
+        findOptions.where = [];
+
+        const getUsername = filterModel.getCondition('username');
+        if (getUsername && getUsername.opr === 'eq') {
+          findOptions.where.push({username: Equal(getUsername.path)});
+        }
+      }
+    }
+
+    try {
+      const [rows, count] = await this._db.findAndCount(findOptions);
+      const result = rows.map((v) => AuthPgRepository._fillModel(v));
+
+      return [null, result, count];
+    } catch (error) {
+      return [new RepositoryException(error)];
+    }
+  }
+
+  private static _fillModel(entity: AuthEntity) {
+    return new AuthModel({
+      id: entity.id,
+      username: entity.username,
+      password: entity.password,
+      role: entity.role,
+      createAt: entity.createAt,
+    });
   }
 }
