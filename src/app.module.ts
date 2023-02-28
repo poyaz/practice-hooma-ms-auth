@@ -8,6 +8,7 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import {PgConfigService} from '@src-loader/database/pg-config.service';
 import {AuthModule} from './module/auth/auth.module';
 import {GrpcExceptionFilter} from './api/grpc/filter/grpc-exception.filter';
+import {CommandModule} from './api/command/command.module';
 
 @Module({
   imports: [
@@ -26,8 +27,18 @@ import {GrpcExceptionFilter} from './api/grpc/filter/grpc-exception.filter';
       imports: [ConfigModule],
       inject: [ConfigService],
       useClass: PgConfigService,
+      extraProviders: [
+        {
+          provide: 'USE_CLI',
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) => {
+            return configService.get('MS_AUTH_BOOTSTRAP') === 'cli';
+          },
+        },
+      ],
     }),
-    TypeOrmModule.forFeature([]),
+
+    CommandModule,
     AuthModule,
   ],
   controllers: [],

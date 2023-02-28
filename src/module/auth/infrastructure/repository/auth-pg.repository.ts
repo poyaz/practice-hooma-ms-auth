@@ -7,7 +7,9 @@ import {AuthEntity} from '../entity/auth.entity';
 import {Equal, FindManyOptions, Repository} from 'typeorm';
 import {FilterModel, SortEnum} from '@src-utility/model/filter.model';
 import {RepositoryException} from '../../core/exception/repository.exception';
+import {Injectable} from '@nestjs/common';
 
+@Injectable()
 export class AuthPgRepository implements GenericRepositoryInterface<AuthModel> {
   constructor(
     private readonly _db: Repository<AuthEntity>,

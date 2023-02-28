@@ -17,7 +17,6 @@ export class PgConfigService implements TypeOrmOptionsFactory {
   }
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    const NODE_ENV = this._configService.get<string>('NODE_ENV', '');
     const DATABASE_OPTIONS = this._configService.get<DatabaseConfigInterface>('postgres');
 
     return <PostgresConnectionOptions>{
@@ -38,11 +37,11 @@ export class PgConfigService implements TypeOrmOptionsFactory {
         ...(DATABASE_OPTIONS.idleTimeout && DATABASE_OPTIONS.idleTimeout > 0 && {idleTimeoutMillis: DATABASE_OPTIONS.idleTimeout}),
       },
 
-      entities: [`dist/infrastructure/entity/*.entity{.ts,.js}`],
+      entities: [`dist/module/**/infrastructure/entity/*.entity{.ts,.js}`],
       synchronize: false,
-      migrations: [`dist/infrastructure/migrations/*{.ts,.js}`],
+      migrations: [`dist/module/**/infrastructure/migrations/*{.ts,.js}`],
       migrationsTableName: 'migrations_history',
-      migrationsRun: this._useCli ? false : NODE_ENV === '' || NODE_ENV === EnvironmentEnv.DEVELOP,
+      migrationsRun: !this._useCli,
       retryAttempts: 0,
     };
   }
