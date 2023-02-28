@@ -7,6 +7,8 @@ import {JwtService} from '@nestjs/jwt';
 import {FilterModel} from '@src-utility/model/filter.model';
 import {AuthenticateException} from '../exception/authenticate.exception';
 import {NotFoundException} from '../exception/not-found.exception';
+import * as bcrypt from 'bcrypt';
+import {DefaultPropertiesSymbol, IsDefaultSymbol} from '@src-utility/model/symbol';
 
 @Injectable()
 export class AuthService implements AuthServiceInterface {
@@ -29,7 +31,8 @@ export class AuthService implements AuthServiceInterface {
     }
 
     const userAuth = userData[0];
-    if (userAuth.password !== model.password) {
+    const password = await bcrypt.hash(model.password, userAuth.salt);
+    if (userAuth.password !== password) {
       return [new AuthenticateException()];
     }
 

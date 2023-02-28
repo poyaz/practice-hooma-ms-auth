@@ -47,6 +47,7 @@ export class AuthPgRepository implements GenericRepositoryInterface<AuthModel> {
       id: entity.id,
       username: entity.username,
       password: entity.password,
+      salt: entity.salt,
       role: entity.role,
       createAt: entity.createAt,
     });

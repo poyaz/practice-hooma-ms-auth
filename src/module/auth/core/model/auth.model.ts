@@ -11,6 +11,7 @@ export class AuthModel extends BaseModel<AuthModel> {
   id: string;
   username: string;
   password: string;
+  salt: string;
   role: AuthRoleEnum;
   createAt: Date;
 
@@ -25,10 +26,11 @@ export class AuthModel extends BaseModel<AuthModel> {
       id: 'default-id',
       username: 'default-username',
       password: 'default-password',
+      salt: 'default-salt',
       role: AuthRoleEnum.USER,
       createAt: new Date(),
       [IsDefaultSymbol]: true,
-      [DefaultPropertiesSymbol]: ['id', 'username', 'password', 'role', 'createAt'],
+      [DefaultPropertiesSymbol]: ['id', 'username', 'password', 'salt', 'role', 'createAt'],
     }));
   }
 }
