@@ -2,16 +2,13 @@ version: "3.3"
 services:
   auth:
     build:
-      context: .
-      dockerfile: ./docker/images/auth/Dockerfile
+      context: "${HOOMA_MS_AUTH_BASE_PATH:-$PWD}"
+      dockerfile: "./docker/images/auth/Dockerfile"
     image: practice-hooma-auth:latest
     expose:
       - 3000
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    networks:
-      main: { }
-      db: { }
     restart: "always"
 
 networks:
