@@ -29,7 +29,7 @@ export class AuthPgRepository implements GenericRepositoryInterface<AuthModel> {
 
         const getUsername = filterModel.getCondition('username');
         if (getUsername && getUsername.opr === 'eq') {
-          findOptions.where.push({username: Equal(getUsername.path)});
+          findOptions.where.push({username: Equal(getUsername.data)});
         }
       }
     }
