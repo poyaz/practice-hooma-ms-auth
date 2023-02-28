@@ -10,20 +10,3 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     restart: "always"
-
-networks:
-  main:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 10.111.0.0/29
-          gateway: 10.111.0.1
-
-  db:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 10.111.0.8/29
-          gateway: 10.111.0.9
