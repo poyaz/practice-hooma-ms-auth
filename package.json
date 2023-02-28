@@ -92,10 +92,7 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "moduleNameMapper": {
-      "@src-api/(.*)": "<rootDir>/api/$1",
       "@src-loader/(.*)": "<rootDir>/loader/$1",
-      "@src-core/(.*)": "<rootDir>/core/$1",
-      "@src-infrastructure/(.*)": "<rootDir>/infrastructure/$1",
       "@src-utility/(.*)": "<rootDir>/utility/$1"
     },
     "collectCoverageFrom": [
