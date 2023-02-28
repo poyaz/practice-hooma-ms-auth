@@ -2,10 +2,10 @@ import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app.module';
 import {ConfigService} from '@nestjs/config';
 import {Transport} from '@nestjs/microservices';
-import {protobufPackage} from '@src-api/grpc/controller/auth/auth.pb';
 import {ServerConfigInterface} from '@src-loader/configure/interface/server-config.interface';
 import {resolve} from 'path';
 import {ValidationPipe} from '@nestjs/common';
+import {protobufPackage} from './module/auth/api/grpc/controller/auth/auth.pb';
 
 async function bootstrap() {
   const appContext = await NestFactory.createApplicationContext(AppModule);

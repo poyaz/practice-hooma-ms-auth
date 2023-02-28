@@ -1,8 +1,10 @@
 import * as moment from 'moment-timezone';
 import {DateTimeInterface} from '../../core/interface/date-time.interface';
+import {Injectable} from '@nestjs/common';
 
+@Injectable()
 export class DateTime implements DateTimeInterface {
-  constructor(private readonly _locales = 'en', private readonly _zone = 'US/Eastern') {
+  constructor(private readonly _locales = 'en', private readonly _zone = 'Asia/Tehran') {
   }
 
   get locales() {

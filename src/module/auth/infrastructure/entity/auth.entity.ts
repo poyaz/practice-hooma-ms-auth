@@ -30,7 +30,7 @@ export class AuthEntity extends BaseEntity {
   id: string;
 
   @Column({type: 'varchar', length: 100})
-  @Index(AUTH_ENTITY_OPTIONS.uniqueName.username, {unique: true, where: 'delete_date ISNULL'})
+  @Index(AUTH_ENTITY_OPTIONS.uniqueName.username, {unique: true, where: 'delete_at ISNULL'})
   username: string;
 
   @Column({type: 'varchar', length: 225})
