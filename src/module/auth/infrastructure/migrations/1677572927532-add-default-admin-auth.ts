@@ -2,7 +2,7 @@ import {MigrationInterface, QueryRunner} from 'typeorm';
 import {AUTH_ENTITY_OPTIONS} from '../entity/auth.entity';
 import {AuthRoleEnum} from '../../core/model/auth.model';
 
-export class addDefaultAdmin1677572927532 implements MigrationInterface {
+export class addDefaultAdminAuth1677572927532 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
